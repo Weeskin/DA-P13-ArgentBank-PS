@@ -1,24 +1,70 @@
-import logoDark from "./logo-dark.svg";
-import logoLight from "./logo-light.svg";
+import {NavLink, useNavigate} from "react-router";
+import {useDispatch, useSelector} from "react-redux"
+import Logo from "/assets/img/argentBankLogo.webp";
 
 export function Welcome() {
+  const isConnected = useSelector((state) => {
+    return state.auth.token;
+  });
+  const userName = useSelector((state) => state.user.userData.userName);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   return (
     <main className="flex items-center justify-center pt-16 pb-4">
       <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
         <header className="flex flex-col items-center gap-9">
-          <div className="w-[500px] max-w-[100vw] p-4">
-            <img
-              src={logoLight}
-              alt="React Router"
-              className="block w-full dark:hidden"
-            />
-            <img
-              src={logoDark}
-              alt="React Router"
-              className="hidden w-full dark:block"
-            />
-          </div>
+          <h1 className="flex items4">Argent Bank</h1>
+          <nav className="flex justify-between items-center w-full px-5 py-2">
+
+            <NavLink
+                to="/"
+                className="main-nav-logo"
+            >
+              <img
+                  className="main-nav-logo-image"
+                  src={Logo}
+                  alt="Argent Bank Logo"
+              />
+            </NavLink>
+            {isConnected ? (
+                <div className="flex items-center">
+                  <NavLink
+                      className="flex flex-nowrap items-center font-bold text-blue-950"
+                      to="/profile"
+                  >
+                    <i
+                        className="fa fa-user-circle"
+                        aria-hidden="true"
+                    ></i>
+                    <p>{userName}</p>
+                  </NavLink>
+                  <NavLink
+                      className="main-nav-item"
+                      to="/"
+                      onClick={HandleFaLogout}
+                  >
+                    <p>Sign Out</p>
+                  </NavLink>
+                </div>
+            ) : (
+                <div className="not-connected">
+                  <NavLink
+                      className="main-nav-item"
+                      to="/login"
+                  >
+                    <i
+                        className="fa fa-user-circle"
+                        aria-hidden="true"
+                    ></i>
+                    <p>Sign In</p>
+                  </NavLink>
+                </div>
+            )}
+          </nav>
         </header>
+
         <div className="max-w-[300px] w-full space-y-6 px-4">
           <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
             <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
