@@ -9,8 +9,7 @@ Application web permettant aux clients d'Argent Bank de se connecter et de gére
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)
 ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
-![SCSS](https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white)
-![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
 
 ## Objectifs
@@ -28,7 +27,7 @@ Application web permettant aux clients d'Argent Bank de se connecter et de gére
 ## Prérequis
 
 - [Node.js](https://nodejs.org/en/)
-- [Yarn](https://yarnpkg.com/)
+- [pnpm](https://pnpm.io/)
 
 ## Installation
 
@@ -37,8 +36,8 @@ Application web permettant aux clients d'Argent Bank de se connecter et de gére
 ```bash
 git clone https://github.com/Weeskin/DA-P13-ArgentBank-PS.git
 cd DA-P13-ArgentBank-PS
-yarn install
-yarn start
+pnpm install
+pnpm dev
 ```
 
 ### 2 - API
@@ -65,5 +64,4 @@ L'API tourne sur [http://localhost:3001/](http://localhost:3001/)
 - [React](https://fr.reactjs.org/)
 - [Redux](https://redux.js.org/)
 - [React Router](https://reactrouter.com/)
-- [Axios](https://axios-http.com/)
 - [Swagger Editor](https://swagger.io/tools/swagger-editor/)
