@@ -1,5 +1,13 @@
 const BASE_URL = "http://localhost:3001/api/v1";
 
+async function safeFetch(url: string, options?: RequestInit): Promise<Response> {
+  try {
+    return await fetch(url, options);
+  } catch {
+    throw new Error("Le serveur est inaccessible. Vérifiez que le backend est démarré.");
+  }
+}
+
 export interface LoginPayload {
   email: string;
   password: string;
@@ -12,7 +20,7 @@ export interface UserProfile {
 }
 
 export async function login(payload: LoginPayload): Promise<string> {
-  const response = await fetch(`${BASE_URL}/user/login`, {
+  const response = await safeFetch(`${BASE_URL}/user/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -27,7 +35,7 @@ export async function login(payload: LoginPayload): Promise<string> {
 }
 
 export async function getProfile(token: string): Promise<UserProfile> {
-  const response = await fetch(`${BASE_URL}/user/profile`, {
+  const response = await safeFetch(`${BASE_URL}/user/profile`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -52,7 +60,7 @@ export async function updateProfile(
   firstName: string,
   lastName: string
 ): Promise<UserProfile> {
-  const response = await fetch(`${BASE_URL}/user/profile`, {
+  const response = await safeFetch(`${BASE_URL}/user/profile`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
