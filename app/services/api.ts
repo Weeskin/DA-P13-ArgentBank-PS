@@ -4,7 +4,7 @@ async function safeFetch(url: string, options?: RequestInit): Promise<Response> 
   try {
     return await fetch(url, options);
   } catch {
-    throw new Error("Le serveur est inaccessible. Vérifiez que le backend est démarré.");
+    throw new Error("Server down. Try again later.");
   }
 }
 

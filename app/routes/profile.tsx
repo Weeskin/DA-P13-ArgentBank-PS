@@ -79,10 +79,12 @@ export default function Profile() {
 
   if (!token) return null;
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <>
       <Navbar />
-      <main className="bg-[#dfe6ed] min-h-[calc(100vh-64px)] text-gray-900">
+      <main className="bg-[#dfe6ed] min-h-screen flex flex-col text-gray-900">
         <div className="flex flex-col items-center pt-12 px-4">
           <h1 className="text-3xl font-bold mb-6 text-gray-900">
             Welcome back
@@ -164,6 +166,9 @@ export default function Profile() {
             ))}
           </section>
         </div>
+        <footer className="text-center text-sm text-gray-500 py-4 bg-gray-100 mt-auto">
+          &copy; {currentYear} Argent Bank. All rights reserved.
+        </footer>
       </main>
     </>
   );

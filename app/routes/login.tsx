@@ -6,6 +6,7 @@ import { setToken } from "../store/authSlice";
 import { setUserData } from "../store/userSlice";
 import { Navbar } from "../components/Navbar";
 import { login, getProfile } from "../services/api";
+import { useEffect } from "react";
 
 export function meta() {
   return [{ title: "Argent Bank — Sign In" }];
@@ -21,6 +22,17 @@ export default function Login() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
+  // Charger les données du localStorage au montage
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("argentbank_email");
+    const savedRemember = localStorage.getItem("argentbank_remember");
+
+    if (savedEmail && savedRemember === "true") {
+      setEmail(savedEmail);
+      setRememberMe(true);
+    }
+  }, []);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
@@ -32,6 +44,18 @@ export default function Login() {
 
       const profile = await getProfile(token);
       dispatch(setUserData(profile));
+
+      // Sauvegarder les données si "Remember me" est coché
+      if (rememberMe) {
+        localStorage.setItem("argentbank_email", email);
+        localStorage.setItem("argentbank_remember", "true");
+        localStorage.setItem("argentbank_token", token);
+      } else {
+        // Nettoyer le localStorage si "Remember me" n'est pas coché
+        localStorage.removeItem("argentbank_email");
+        localStorage.removeItem("argentbank_remember");
+        localStorage.removeItem("argentbank_token");
+      }
 
       navigate("/profile");
     } catch (err) {

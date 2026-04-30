@@ -20,6 +20,8 @@ const features = [
 ];
 
 export function Welcome() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <main>
       {/* Hero */}
@@ -57,6 +59,11 @@ export function Welcome() {
           </div>
         ))}
       </section>
+
+      {/* Footer */}
+      <footer className="text-center text-sm text-gray-500 py-4 bg-gray-50 ">
+        &copy; {currentYear} Argent Bank. All rights reserved.
+      </footer>
     </main>
   );
 }
