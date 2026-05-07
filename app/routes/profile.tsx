@@ -83,8 +83,8 @@ export default function Profile() {
 
   return (
     <>
-      <Navbar />
       <main className="bg-[#dfe6ed] min-h-screen flex flex-col text-gray-900">
+      <Navbar />
         <div className="flex flex-col items-center pt-12 px-4">
           <h1 className="text-3xl font-bold mb-6 text-gray-900">
             Welcome back
@@ -147,8 +147,8 @@ export default function Profile() {
           <section className="w-full max-w-4xl flex flex-col gap-4">
             {[
               { title: "Argent Bank Checking (x8349)", amount: "$2,082.79", type: "Available Balance" },
-              { title: "Argent Bank Savings (x6712)", amount: "$10,928.42", type: "Available Balance" },
-              { title: "Argent Bank Credit Card (x8349)", amount: "$184.30", type: "Current Balance" },
+              { title: "Argent Bank Savings (x67124)", amount: "$10,928.42", type: "Available Balance" },
+              { title: "Argent Bank Credit Card (x5201)", amount: "$184.30", type: "Current Balance" },
             ].map((account) => (
               <div
                 key={account.title}

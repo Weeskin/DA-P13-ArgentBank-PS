@@ -1,11 +1,21 @@
 swagger: "2.0"
 info:
   title: Bank Argent API documentation
-  description: Contains all available API endpoints in this codebase
+  description: |
+    API de référence pour la phase backend.
+    - `profile` désigne la personne connectée (nom, prénom, pseudo, email éventuel)
+    - `accounts` désigne les comptes bancaires de l'utilisateur
+    - `transactions` désigne les opérations rattachées à un compte bancaire
+    - `category` correspond à une valeur de référence affichée dans une liste déroulante
+    - `page`, `limit`, `fromDate` et `toDate` sont documentés pour préparer pagination et filtrage par période
+
+    Versioning retenu :
+    - `/api/v1` pour l'authentification et le profil
+    - `/api/v2` pour les comptes et transactions
   version: "1.0.0"
   termsOfService: "http://swagger.io/terms/"
 host: localhost:3001
-basePath: /api/v2
+basePath: /api
 schemes:
   - http
 securityDefinitions:
@@ -14,7 +24,7 @@ securityDefinitions:
     name: Authorization
     in: header
 paths:
-  /user/login:
+  /v1/user/login:
     post:
       tags:
         - User Module
@@ -39,7 +49,7 @@ paths:
         "500":
           description: Internal Server Error
 
-  /user/signup:
+  /v1/user/signup:
     post:
       tags:
         - User Module
@@ -64,7 +74,7 @@ paths:
         "500":
           description: Internal Server Error
 
-  /user/profile:
+  /v1/user/profile:
     post:
       security:
         - Bearer: []
@@ -78,7 +88,7 @@ paths:
         "200":
           description: Profile retrieved successfully
           schema:
-            $ref: "#/definitions/UserProfile"
+            $ref: "#/definitions/UserProfileResponse"
         "401":
           description: Unauthorized user
         "500":
@@ -96,25 +106,68 @@ paths:
           description: Update user profile attributes
           required: true
           schema:
-            $ref: "#/definitions/UserProfile"
+            $ref: "#/definitions/UserProfileUpdate"
       produces:
         - application/json
       responses:
         "200":
           description: User profile retrieved successully
           schema:
-            $ref: "#/definitions/ApiResponse"
+            $ref: "#/definitions/UserProfileResponse"
         "400":
           description: Invalid Fields
         "500":
           description: Internal Server Error
 
-  /transactions/{accountID}:
+  /v1/user/accounts:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Accounts API
+      description: API for fetching the bank accounts linked to the authenticated user
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Accounts retrieved successfully
+          schema:
+            $ref: "#/definitions/AccountListResponse"
+        "401":
+          description: Unauthorized user
+        "500":
+          description: Internal Server Error
+
+  /v2/categories:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - User Accounts and Transactions
+      summary: Get transaction categories
+      description: >
+        API for retrieving the list of available categories for transactions.
+        This list is managed server-side, making it easy to add, remove or rename
+        categories without any frontend change.
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Categories retrieved successfully
+          schema:
+            $ref: "#/definitions/CategoryListResponse"
+        "401":
+          description: Unauthorized user
+        "500":
+          description: Internal Server Error
+
+  /v2/transactions/{accountID}:
     get:
       tags:
         - User Accounts and Transactions
       summary: Account transactions
-      description: API for retrieving list of transactions associated with a chosen account
+      description: API for retrieving the transactions associated with a chosen account. Pagination and date filters are documented as optional query parameters.
       security:
         - Bearer: []
       parameters:
@@ -123,15 +176,39 @@ paths:
           description: ID of an account
           required: true
           type: string
+        - in: query
+          name: page
+          description: Page number for pagination (backend behavior to confirm if omitted)
+          required: false
+          type: integer
+          format: int32
+          default: 1
+        - in: query
+          name: limit
+          description: Number of transactions per page (backend behavior to confirm if omitted)
+          required: false
+          type: integer
+          format: int32
+          default: 10
+        - in: query
+          name: fromDate
+          description: Start date of the transaction range (inclusive)
+          required: false
+          type: string
+          format: date
+        - in: query
+          name: toDate
+          description: End date of the transaction range (inclusive)
+          required: false
+          type: string
+          format: date
       produces:
         - application/json
       responses:
         "200":
-          description: All transactions retrieved successfully
+          description: Transactions retrieved successfully
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/TransactionsResponse"
+            $ref: "#/definitions/TransactionListResponse"
         "401":
           description: Unauthorized user
         "404":
@@ -139,7 +216,7 @@ paths:
         "500":
           description: Internal Server Error
 
-  /transactions/account/{transactionID}:
+  /v2/transactions/account/{transactionID}:
     get:
       tags:
         - User Accounts and Transactions
@@ -159,7 +236,7 @@ paths:
         "200":
           description: Transaction retrieved successfully
           schema:
-            $ref: "#/definitions/TransactionsResponse"
+            $ref: "#/definitions/TransactionDetailResponse"
         "401":
           description: Unauthorized user
         "404":
@@ -170,8 +247,8 @@ paths:
     put:
       tags:
         - User Accounts and Transactions
-      summary: Update transaction's category
-      description: API for updating transaction
+      summary: Update transaction's category and note
+      description: API for updating a transaction. `category` is the dropdown value, `note` is the user annotation.
       security:
         - Bearer: []
       parameters:
@@ -181,18 +258,18 @@ paths:
           required: true
           type: string
         - in: body
-          name: category
-          description: Modified transaction's category
+          name: transaction
+          description: Modified transaction payload
           required: true
           schema:
-            $ref: "#/definitions/TransactionCategory"
+            $ref: "#/definitions/TransactionUpdateRequest"
       produces:
         - application/json
       responses:
         "200":
-          description: Transaction's category modified successfully
+          description: Transaction updated successfully
           schema:
-            $ref: "#/definitions/TransactionCategory"
+            $ref: "#/definitions/TransactionUpdateResponse"
         "401":
           description: Unauthorized user
         "404":
@@ -254,8 +331,50 @@ definitions:
   UserProfile:
     type: object
     properties:
+      email:
+        type: string
+        description: User email
+      firstName:
+        type: string
+        description: User first name
+      lastName:
+        type: string
+        description: User last name
       userName:
         type: string
+        description: User public name
+
+  UserProfileUpdate:
+    type: object
+    properties:
+      firstName:
+        type: string
+        description: User first name
+      lastName:
+        type: string
+        description: User last name
+
+  UserProfileResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        $ref: "#/definitions/UserProfile"
+
+  AccountListResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: array
+        items:
+          $ref: "#/definitions/AccountResponse"
 
   AccountResponse:
     type: object
@@ -277,12 +396,15 @@ definitions:
         type: string
         description: Account availability
 
-  TransactionsResponse:
+  Transaction:
     type: object
     properties:
       transactionID:
         type: string
         description: Transaction ID
+      accountID:
+        type: string
+        description: Account ID associated with the transaction
       transactionType:
         type: string
         description: Type of transaction
@@ -299,23 +421,97 @@ definitions:
       balance:
         type: number
         format: double
-        description: Available balance
+        description: Available balance after transaction
       category:
         type: string
-        description: Name of the category
+        description: Category selected from the dropdown list
       note:
         type: string
         description: User note attached to the transaction
 
-  TransactionCategory:
+  TransactionListResponse:
     type: object
     properties:
-      name:
+      status:
+        type: integer
+      message:
         type: string
+      body:
+        type: object
+        properties:
+          accountID:
+            type: string
+          page:
+            type: integer
+          limit:
+            type: integer
+          totalTransactions:
+            type: integer
+          totalPages:
+            type: integer
+          transactions:
+            type: array
+            items:
+              $ref: "#/definitions/Transaction"
+
+  TransactionDetailResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        $ref: "#/definitions/Transaction"
+
+  TransactionUpdateRequest:
+    type: object
+    properties:
       category:
         type: string
+        description: Category ID selected from the dropdown (values come from GET /v2/categories)
       note:
         type: string
+        description: New user note attached to the transaction
+
+  TransactionUpdateResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          transactionID:
+            type: string
+          category:
+            type: string
+          note:
+            type: string
+
+  Category:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier of the category
+      label:
+        type: string
+        description: Human-readable category name displayed in the dropdown (e.g. "Food", "Salary")
+
+  CategoryListResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: array
+        items:
+          $ref: "#/definitions/Category"
 
   TransactionNote:
     type: object
