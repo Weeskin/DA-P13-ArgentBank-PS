@@ -23,7 +23,7 @@ export function Welcome() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <main>
+    <main className="flex flex-col w-full flex-1">
       {/* Hero */}
       <div
         className="relative bg-cover bg-center"
@@ -31,7 +31,7 @@ export function Welcome() {
       >
         <div className="absolute inset-0 bg-black/30" />
         <section className="relative z-10 flex justify-end items-center min-h-[400px] px-8 py-12">
-          <div className="bg-white p-8 max-w-sm text-right">
+          <div className="bg-white text-gray-900 p-8 max-w-sm text-right">
             <p className="font-bold text-lg">No fees.</p>
             <p className="font-bold text-lg">No minimum deposit.</p>
             <p className="font-bold text-lg">High interest rates.</p>
@@ -43,7 +43,7 @@ export function Welcome() {
       </div>
 
       {/* Features */}
-      <section className="flex flex-col md:flex-row justify-center gap-8 px-8 py-12 bg-gray-50">
+      <section className="flex flex-col md:flex-row justify-center items-center gap-8 px-8 py-12 bg-gray-50 flex-1">
         {features.map((feature) => (
           <div
             key={feature.title}

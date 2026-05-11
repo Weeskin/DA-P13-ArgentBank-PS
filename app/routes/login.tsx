@@ -69,7 +69,7 @@ export default function Login() {
     <>
       <Navbar />
       <main className="flex items-center justify-center min-h-[calc(100vh-64px)] bg-gray-100">
-        <section className="flex flex-col items-center bg-white p-8 w-full max-w-sm shadow">
+        <section className="flex flex-col items-center bg-white text-gray-900 p-8 w-full max-w-sm shadow">
           <i className="fa fa-user-circle text-4xl block text-center mb-4" aria-hidden="true"></i>
           <h1 className="text-2xl font-bold text-center mb-6">Sign In</h1>
 
@@ -84,7 +84,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="border border-gray-300 p-2 text-lg"
+                className="border border-gray-300 p-2 text-lg text-gray-900 bg-white"
               />
             </div>
 
@@ -98,7 +98,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="border border-gray-300 p-2 text-lg"
+                className="border border-gray-300 p-2 text-lg text-gray-900 bg-white"
               />
             </div>
 

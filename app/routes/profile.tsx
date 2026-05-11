@@ -98,7 +98,7 @@ export default function Profile() {
 
           {editing ? (
             <form onSubmit={handleSave} className="flex flex-col gap-3 w-full max-w-lg mb-8">
-              <div className="flex gap-4">
+              <div className="flex gap-4 justify-center">
                 <input
                   type="text"
                   value={newFirstName}
@@ -121,14 +121,14 @@ export default function Profile() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="border border-indigo-500 text-indigo-500 bg-white px-8 py-1.5 hover:bg-indigo-500 hover:text-white disabled:opacity-50 cursor-pointer transition-colors"
+                  className="w-1/4 border border-indigo-500 text-indigo-500 bg-white px-8 py-1.5 hover:bg-indigo-500 hover:text-white disabled:opacity-50 cursor-pointer transition-colors"
                 >
                   {loading ? "Saving..." : "Save"}
                 </button>
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="border border-indigo-500 text-indigo-500 bg-white px-8 py-1.5 hover:bg-indigo-500 hover:text-white cursor-pointer transition-colors"
+                  className="w-1/4 border border-indigo-500 text-indigo-500 bg-white px-8 py-1.5 hover:bg-indigo-500 hover:text-white cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
