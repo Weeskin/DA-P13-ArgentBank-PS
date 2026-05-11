@@ -441,7 +441,7 @@ definitions:
         properties:
           accountID:
             type: string
-          page:
+          currentPage:
             type: integer
           limit:
             type: integer

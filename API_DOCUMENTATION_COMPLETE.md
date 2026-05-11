@@ -483,7 +483,7 @@ Response:
 PUT /api/v2/transactions/account/{transactionID}
 
 Body {
-  category: "Groceries",      ← Nilai from dropdown
+  category: "Groceries",         ← Nilai from dropdown
   note: "Supermarché Carrefour"  ← Free text annotation
 }
 
@@ -509,11 +509,11 @@ GET /api/v2/transactions/{accountID}?page=1&limit=10
 Response (200) {
   body: {
     accountID: "...",
-    page: 1,              ← Page actuelle
-    limit: 10,            ← Par page
+    currentPage: 1,          ← Page actuelle
+    limit: 10,               ← Par page
     totalTransactions: 127,  ← Total sur le compte
-    totalPages: 13,       ← Nombre de pages
-    transactions: [...]   ← Max 10 items
+    totalPages: 13,          ← Nombre de pages
+    transactions: [...]      ← Max 10 items
   }
 }
 ```
